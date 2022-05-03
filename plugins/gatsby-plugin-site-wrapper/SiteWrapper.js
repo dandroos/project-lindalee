@@ -1,13 +1,14 @@
-import React from "react"
 import { CssBaseline, ThemeProvider } from "@mui/material"
-import { theme } from "../../src/theme"
+
 import { Helmet } from "react-helmet"
+import React from "react"
+import { theme } from "../../src/theme"
 
 const SiteWrapper = ({ children }) => {
   return (
     <>
       <Helmet>
-        <link href="http://fonts.cdnfonts.com/css/meticula" rel="stylesheet" />
+        <link href="https://fonts.cdnfonts.com/css/meticula" rel="stylesheet" />
       </Helmet>
       <ThemeProvider theme={theme}>
         <CssBaseline />
