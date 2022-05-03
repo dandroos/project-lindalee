@@ -1,0 +1,296 @@
+local_backend: true
+backend:
+  name: git-gateway
+  branch: master
+media_folder: content/site_images
+collections:
+  - label: Admin
+    name: admin
+    editor:
+      preview: false
+    files:
+      - label: Contact
+        name: contact
+        file: content/admin/contact.md
+        fields:
+          - label: Phone number (English)
+            name: phoneNumber_en
+            hint: Please don't include the international code or spaces
+          - label: Phone number (Spanish)
+            name: phoneNumber_es
+            hint: Please don't include the international code or spaces
+          - label: Email address
+            name: emailAddress
+      - label: Location & Schedule
+        name: location
+        file: content/admin/location.md
+        fields:
+          - label: Address
+            name: address
+            hint: Separate address lines with commas
+          - label: Latitude
+            name: latitude
+          - label: Longitude
+            name: longitude
+          - label: Opening hours
+            name: openingHours
+            widget: object
+            fields:
+              - label: Morning/Afternoon
+                name: morningAfternoon
+                widget: object
+                fields:
+                  - label: Start
+                    name: start
+                  - label: Finish
+                    name: finish
+              - label: Afternoon/Evening
+                name: afternoonEvening
+                widget: object
+                fields:
+                  - label: Start
+                    name: start
+                  - label: Finish
+                    name: finish
+      - label: Social media
+        name: socialMedia
+        file: content/admin/socialMedia.md
+        fields:
+          - label: Facebook username
+            name: facebook
+  - label: Pages
+    name: pages
+    media_folder: ./images
+    public_folder: images
+    editor:
+      preview: false
+    files:
+          
+      - label: Homepage
+        name: homepage
+        file: content/pages/homepage.md
+        fields:
+          - label: Slides
+            name: slides
+            widget: list
+            fields:
+              - label: Slide
+                name: slide
+                widget: object
+                fields:
+                  - label: Image
+                    name: image
+                    widget: image
+                  - label: Heading
+                    name: heading
+                    widget: object
+                    fields:
+                      - label: English
+                        name: en
+                      - label: Español
+                        name: es
+                      - label: Deutsch
+                        name: de
+                  - label: Main Text
+                    name: main
+                    widget: object
+                    fields:
+                      - label: English
+                        name: en
+                      - label: Español
+                        name: es
+                      - label: Deutsch
+                        name: de
+                  - label: Button
+                    name: button
+                    widget: object
+                    fields:
+                      - label: Text
+                        name: text
+                        widget: object
+                        fields:
+                          - label: English
+                            name: en
+                          - label: Español
+                            name: es
+                          - label: Deutsch
+                            name: de
+                      - label: Link to...
+                        name: link
+                        widget: select
+                        options:
+                          - {label: Dogs page, value: "dogs"}
+                          - {label: Cats page, value: "cats"}
+                          - {label: Services page, value: "services"}
+                          - {label: About us page, value: "about"}
+                          - {label: Contact page, value: "contact"}
+                          - {label: Reservation page, value: "reserve"}
+                  - label: Overlay colour
+                    name: overlay
+                    widget: select
+                    options:
+                      - { label: Light, value: light}
+                      - { label: Dark, value: dark}
+                      - { label: Yellow, value: primary}
+                      - { label: Blue, value: secondary}
+      - label: Dogs
+        name: dogs
+        file: content/pages/dogs.md
+        fields:
+          - label: Price per day (€)
+            name: price
+            widget: number
+            value_type: float
+          - label: Featured Image
+            name: featured_image
+            widget: image
+          - label: Text
+            name: text
+            widget: object
+            fields:
+              - label: English
+                name: en
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Español
+                name: es
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Deutsch
+                name: de
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+      - label: Cats 
+        name: cats
+        file: content/pages/cats.md
+        fields:
+          - label: Price per day (€)
+            name: price
+            widget: number
+            value_type: float
+          - label: Featured Image
+            name: featured_image
+            widget: image
+          - label: Text
+            name: text
+            widget: object
+            fields:
+              - label: English
+                name: en
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Español
+                name: es
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Deutsch
+                name: de
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+            
+      - label: Services 
+        name: services
+        file: content/pages/services.md
+        fields:
+          - label: Featured Image
+            name: featured_image
+            widget: image
+          - label: Text
+            name: text
+            widget: object
+            fields:
+              - label: English
+                name: en
+                widget: markdown
+                buttons: ["bold", "italic", "heading-three"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Español
+                name: es
+                widget: markdown
+                buttons: ["bold", "italic", "heading-three"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Deutsch
+                name: de
+                widget: markdown
+                buttons: ["bold", "italic", "heading-three"]
+                modes: ["rich_text"]
+                editor_components: [""]
+      - label: About us 
+        name: about
+        file: content/pages/about.md
+        fields:
+          - label: Featured Image
+            name: featured_image
+            widget: image
+          - label: Text
+            name: text
+            widget: object
+            fields:
+              - label: English
+                name: en
+                widget: markdown
+                buttons: ["bold", "italic", "heading-three"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Español
+                name: es
+                widget: markdown
+                buttons: ["bold", "italic", "heading-three"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Deutsch
+                name: de
+                widget: markdown
+                buttons: ["bold", "italic", "heading-three"]
+                modes: ["rich_text"]
+                editor_components: [""]
+      - label: Contact 
+        name: contact
+        file: content/pages/contact.md
+        fields:
+          - label: Featured Image
+            name: featured_image
+            widget: image
+      - label: Book Now!
+        name: book
+        file: content/pages/book.md
+        fields:
+          - label: Featured Image
+            name: featured_image
+            widget: image
+          - label: Text
+            name: text
+            widget: object
+            fields:
+              - label: English
+                name: en
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Español
+                name: es
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]
+              - label: Deutsch
+                name: de
+                widget: markdown
+                buttons: ["bold", "italic"]
+                modes: ["rich_text"]
+                editor_components: [""]

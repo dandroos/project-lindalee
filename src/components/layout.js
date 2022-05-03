@@ -1,55 +1,104 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
-
 import * as React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
 
-import Header from "./header"
-import "./layout.css"
+import { AnimatePresence, motion } from "framer-motion"
+import { Box, Toolbar, useMediaQuery, useTheme } from "@mui/material"
+import { setFontsLoaded, setIsMobile, setSiteReady } from "../redux/actions"
 
-const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
+import FontFaceObserver from "fontfaceobserver"
+import Footer from "./Footer"
+import LanguageRedirect from "./dialogs/LanguageRedirect"
+import LanguageUtility from "./LanguageUtility"
+import { LocalizationProvider } from "@mui/x-date-pickers"
+import Nav from "./Nav"
+import SpeedContact from "./SpeedContact"
+import Toast from "./Toast"
+import { connect } from "react-redux"
+
+const Layout = ({
+  language,
+  fontsLoaded,
+  siteReady,
+  location,
+  locationId,
+  dispatch,
+  children,
+  drawerWidth,
+}) => {
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("md"))
+
+  React.useEffect(() => {
+    dispatch(setIsMobile(isMobile))
+    //eslint-disable-next-line
+  }, [isMobile])
+
+  React.useEffect(() => {
+    const loadFonts = () => {
+      var fontA = new FontFaceObserver("meticula")
+      var fontB = new FontFaceObserver("meticula-bold")
+
+      Promise.all([fontA.load(), fontB.load()]).then(function () {
+        dispatch(setFontsLoaded(true))
+      }, loadFonts)
+    }
+    loadFonts()
+    //eslint-disable-next-line
+  }, [])
+
+  React.useEffect(() => {
+    if (!siteReady) {
+      if (language && fontsLoaded) {
+        dispatch(setSiteReady(true))
       }
     }
-  `)
+    //eslint-disable-next-line
+  }, [language, fontsLoaded])
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `2rem`,
-          }}
-        >
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
-      </div>
+      <LocalizationProvider locale={language} dateAdapter={AdapterMoment}>
+        {siteReady && <LanguageUtility pathname={location.pathname} />}
+        {isMobile && <SpeedContact />}
+        <LanguageRedirect />
+        <Toast />
+        <Box display="flex" flexDirection="column">
+          <Box component="header">{siteReady && <Nav />}</Box>
+          <AnimatePresence exitBeforeEnter>
+            <Box
+              component={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              key={location.pathname}
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              width={isMobile ? undefined : `calc(100% - ${drawerWidth}px)`}
+              ml={isMobile ? undefined : `${drawerWidth}px`}
+            >
+              <Box
+                component="main"
+                pb={locationId === "home" ? 0 : 2}
+                minHeight="100vh"
+              >
+                {isMobile && locationId !== "home" && <Toolbar />}
+                {children}
+              </Box>
+              <Footer />
+            </Box>
+          </AnimatePresence>
+        </Box>
+      </LocalizationProvider>
     </>
   )
 }
 
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
+const stp = s => ({
+  siteReady: s.siteReady,
+  drawerWidth: s.drawerWidth,
+  language: s.language,
+  fontsLoaded: s.fontsLoaded,
+  locationId: s.locationId,
+})
 
-export default Layout
+export default connect(stp)(Layout)

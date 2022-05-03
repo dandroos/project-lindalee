@@ -1,16 +1,11 @@
-/**
- * SEO component that queries for data with
- *  Gatsby's useStaticQuery React hook
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
-
 import * as React from "react"
-import PropTypes from "prop-types"
-import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
 
-function Seo({ description, lang, meta, title }) {
+import { graphql, useStaticQuery } from "gatsby"
+
+import { Helmet } from "react-helmet"
+import PropTypes from "prop-types"
+
+function Seo({ homepage, description, language, meta, title }) {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -18,7 +13,7 @@ function Seo({ description, lang, meta, title }) {
           siteMetadata {
             title
             description
-            author
+            siteUrl
           }
         }
       }
@@ -27,18 +22,23 @@ function Seo({ description, lang, meta, title }) {
 
   const metaDescription = description || site.siteMetadata.description
   const defaultTitle = site.siteMetadata?.title
-
   return (
     <Helmet
       htmlAttributes={{
-        lang,
+        lang: language,
       }}
-      title={title}
-      titleTemplate={defaultTitle ? `%s | ${defaultTitle}` : null}
+      title={homepage ? defaultTitle : title}
+      titleTemplate={
+        defaultTitle ? (homepage ? null : `%s | ${defaultTitle}`) : null
+      }
       meta={[
         {
           name: `description`,
           content: metaDescription,
+        },
+        {
+          name: `og:url`,
+          content: site.siteUrl,
         },
         {
           property: `og:title`,
@@ -53,20 +53,20 @@ function Seo({ description, lang, meta, title }) {
           content: `website`,
         },
         {
+          property: `og:site_name`,
+          content: `Manohecha Hotel Canino & Felino`,
+        },
+        {
+          property: `og:image`,
+          content: "../images/ogimage.png",
+        },
+        {
+          property: `og:locale`,
+          content: language,
+        },
+        {
           name: `twitter:card`,
           content: `summary`,
-        },
-        {
-          name: `twitter:creator`,
-          content: site.siteMetadata?.author || ``,
-        },
-        {
-          name: `twitter:title`,
-          content: title,
-        },
-        {
-          name: `twitter:description`,
-          content: metaDescription,
         },
       ].concat(meta)}
     />

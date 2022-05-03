@@ -1,31 +1,36 @@
+import detectBrowserLanguage from "detect-browser-language"
+import { graphql, useStaticQuery } from "gatsby"
 import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import { connect } from "react-redux"
+import { setLanguage, setLocationId } from "../redux/actions"
 
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+const IndexPage = ({ dispatch }) => {
+  const { supportedLanguages } = useStaticQuery(graphql`
+    {
+      site {
+        siteMetadata {
+          supportedLanguages
+        }
+      }
+    }
+  `).site.siteMetadata
+  React.useEffect(() => {
+    dispatch(setLocationId("home"))
+    const storedLangPref = localStorage.getItem("manohecha_lang_pref")
+    if (storedLangPref) {
+      dispatch(setLanguage(storedLangPref))
+    } else {
+      const browserLang = detectBrowserLanguage().substr(0, 2)
+      console.log(browserLang)
+      if (supportedLanguages.includes(browserLang)) {
+        dispatch(setLanguage(browserLang))
+      } else {
+        dispatch(setLanguage("es"))
+      }
+    }
+    //eslint-disable-next-line
+  }, [])
+  return null
+}
 
-const IndexPage = () => (
-  <Layout>
-    <Seo title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <StaticImage
-      src="../images/gatsby-astronaut.png"
-      width={300}
-      quality={95}
-      formats={["auto", "webp", "avif"]}
-      alt="A Gatsby astronaut"
-      style={{ marginBottom: `1.45rem` }}
-    />
-    <p>
-      <Link to="/page-2/">Go to page 2</Link> <br />
-      <Link to="/using-typescript/">Go to "Using TypeScript"</Link> <br />
-      <Link to="/using-ssr">Go to "Using SSR"</Link> <br />
-      <Link to="/using-dsg">Go to "Using DSG"</Link>
-    </p>
-  </Layout>
-)
-
-export default IndexPage
+export default connect()(IndexPage)

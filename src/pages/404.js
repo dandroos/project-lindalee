@@ -1,14 +1,22 @@
 import * as React from "react"
 
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import Page from "../components/Page"
+import { Typography } from "@mui/material"
+import { connect } from "react-redux"
+import { setLanguage } from "../redux/actions"
+import text from "../dictionary"
 
-const NotFoundPage = () => (
-  <Layout>
-    <Seo title="404: Not found" />
-    <h1>404: Not Found</h1>
-    <p>You just hit a route that doesn&#39;t exist... the sadness.</p>
-  </Layout>
-)
+const NotFoundPage = ({ dispatch, language }) => {
+  dispatch(setLanguage("es"))
+  return (
+    <Page title={text.title404[language]}>
+      <Typography>{text.body404[language]}</Typography>
+    </Page>
+  )
+}
 
-export default NotFoundPage
+const stp = s => ({
+  language: s.language,
+})
+
+export default connect(stp)(NotFoundPage)
