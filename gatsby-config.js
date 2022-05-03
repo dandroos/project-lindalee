@@ -15,6 +15,7 @@ module.exports = {
     // `gatsby-plugin-mui-pickers`,
     `gatsby-plugin-redux`,
     `gatsby-plugin-image`,
+    `gatsby-plugin-netlify`,
     `gatsby-plugin-netlify-cms`,
     {
       resolve: `gatsby-plugin-web-font-loader`,
